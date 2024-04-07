@@ -4,6 +4,7 @@ import threading
 
 # Sender function with threading
 def send_timing_channel_message(message, target_ip, target_port, interval=0.5):
+    start_time = time.time()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((target_ip, target_port))
         for char in message:
@@ -12,6 +13,12 @@ def send_timing_channel_message(message, target_ip, target_port, interval=0.5):
             else:
                 time.sleep(interval)
             s.sendall(b'.')
+        end_time = time.time()
+    time_taken = end_time - start_time
+    # Calculate the speed in bits per second
+    speed = len(message) / time_taken
+    print(f"Speed of data changing bits per second: {speed:.2f}")
+
 
 # Receiver function with threading
 def listen_for_timing_channel_messages(port, interval=0.5):
